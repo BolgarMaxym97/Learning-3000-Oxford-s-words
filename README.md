@@ -1,6 +1,6 @@
-# y
+# This site can help you teach 3000 Oxford's word
 
-> y
+> This site can help you teach 3000 Oxford's word
 
 ## Build Setup
 
