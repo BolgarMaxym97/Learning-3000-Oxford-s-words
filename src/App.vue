@@ -59,7 +59,33 @@
                   </div>
                   <!-- Modal footer -->
                   <div class="modal-footer">
-                    <button type="button" class="btn btn-danger waves-effect waves-light" data-dismiss="modal">Закрыть</button>
+                    <button type="button" class="btn btn-danger waves-effect waves-light" data-dismiss="modal">Закрыть
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="modal" id="welcome">
+              <div class="modal-dialog modal-lg modal-dialog-centered">
+                <div class="modal-content">
+                  <!-- Modal Header -->
+                  <div class="modal-header">
+                    <h4 class="modal-title">3000 оксфордских слов</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                  </div>
+                  <!-- Modal body -->
+                  <div class="modal-body">
+                    <div class="alert alert-primary" role="alert">
+                      Оксфордский словарь имеет собственный список самых важных слов английского языка.
+                      В целом диапазон слов в словаре составляет 2500–3500 слов, которые покрывают от
+                      86% до 95% английской речи.
+                    </div>
+                  </div>
+                  <!-- Modal footer -->
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-danger waves-effect waves-light" data-dismiss="modal">Закрыть
+                    </button>
                   </div>
                 </div>
               </div>

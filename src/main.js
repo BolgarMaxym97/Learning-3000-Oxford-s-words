@@ -18,4 +18,9 @@ $(document).ready(function () {
       "orderable": false
     }]
   });
+  let showWelcome = +localStorage.getItem('showWelcome');
+  if (showWelcome !== 1) {
+    $('#welcome').modal('show');
+    localStorage.setItem('showWelcome', 1);
+  }
 });
