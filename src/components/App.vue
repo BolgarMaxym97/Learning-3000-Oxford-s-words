@@ -22,7 +22,7 @@
         </div>
         <div class="row">
           <div class="col-md-12">
-          <learnedTable :learnedWords="learnedWords" :vocabulary="vocabulary"></learnedTable>
+          <learnedTable :learnedWords="learnedWords" :vocabulary="vocabulary" @remove="(learnedWords) => this.learnedWords = learnedWords"></learnedTable>
           </div>
         </div>
       </div>

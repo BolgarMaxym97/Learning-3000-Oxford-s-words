@@ -16,16 +16,25 @@
           </div>
           <!-- Modal body -->
           <div class="modal-body">
-            <table class="table table-striped dataTable">
+
+            <div class="input-group">
+              <input class="form-control" v-model="searchWord"
+                     placeholder="Найти слово">
+              <div class="input-group-addon"><i class="fa fa-search"></i></div>
+            </div>
+
+            <table class="table table-striped">
               <thead class="">
               <tr>
-                <th scope="col">Слово</th>
-                <th scope="col">Перевод</th>
+                <th scope="col" class="sorting" data-sorted="default" @click="sorting($event, 'word')">Слово <i
+                  class="fas fa-sort"></i></th>
+                <th scope="col" class="sorting" data-sorted="default" @click="sorting($event, 'translated')">Перевод <i
+                  class="fas fa-sort"></i></th>
                 <th scope="col"></th>
               </tr>
               </thead>
               <tbody>
-              <tr v-for="(translated, index) in learnedWords">
+              <tr v-for="(translated, index) in learnedWordsRendered">
                 <td>{{Object.keys(translated).join('')}}</td>
                 <td>{{translated[Object.keys(translated).join('')]}}</td>
                 <td>
@@ -56,26 +65,85 @@
     name: 'learned-table',
     props: ['learnedWords', 'vocabulary'],
     data() {
-      return {}
+      return {
+        learnedWordsRendered: this.learnedWords,
+        learnedWordsFixed: this.learnedWords,
+        searchWord: '',
+      }
+    },
+    watch: {
+      searchWord: function () {
+        this.learnedWordsRendered = _.filter(this.learnedWordsFixed, item => {
+          let index = Object.keys(item).join('');
+          let value = item[index];
+          return _.includes(index, this.searchWord) || _.includes(value, this.searchWord);
+        });
+      }
     },
     methods: {
       removeFromLearned: function (id) {
-        this.vocabulary.push(Object.keys(this.learnedWords[id]).join(''));
-        this.learnedWords.splice(id, 1);
+        this.vocabulary.push(Object.keys(this.learnedWordsRendered[id]).join(''));
+        this.learnedWordsRendered.splice(id, 1);
+        this.learnedWordsFixed.splice(id, 1);
         localStorage.setItem('vocabulary', JSON.stringify(this.vocabulary));
-        localStorage.setItem('learnedWords', JSON.stringify(this.learnedWords));
+        localStorage.setItem('learnedWords', JSON.stringify(this.learnedWordsRendered));
+        this.$emit('remove', this.learnedWordsRendered)
 
       },
+      sorting: function (ev, column) {
+        let element = $(ev.target);
+        let icon = element.find('i');
+        $('i').not(icon).not('.fa-trash-alt').not('.fa-info-circle').not('.fa-search').removeClass().addClass('fas fa-sort');
+        if (icon.hasClass('fa-sort')) {
+          icon.removeClass('fa-sort').addClass('fa-sort-up');
+          this.learnedWordsRendered = _.sortBy(this.learnedWordsRendered, item => {
+            let index = Object.keys(item).join('');
+            let value = item[index];
+            return column === 'word' ? index : value;
+          });
+
+        } else if (icon.hasClass('fa-sort-up')) {
+          icon.removeClass('fa-sort-up').addClass('fa-sort-down');
+          this.learnedWordsRendered = this.learnedWordsRendered.reverse();
+        } else {
+          icon.removeClass('fa-sort-down').addClass('fa-sort-up');
+          this.learnedWordsRendered = this.learnedWordsRendered.reverse();
+        }
+      }
     },
   }
 </script>
 
 <style lang="scss">
-  .dataTables_scrollHeadInner {
-    width: 95% !important;
+  .sorting {
+    cursor: pointer;
   }
 
-  .dataTables_scrollHeadInner table {
-    width: 95% !important;
+  table {
+    display: flex;
+    flex-flow: column;
+    max-height: 400px;
+    width: 100%;
   }
+
+  table thead {
+    flex: 0 0 auto;
+    width: 100%;
+  }
+
+  table tbody {
+    flex: 1 1 auto;
+    display: block;
+    overflow-y: auto;
+  }
+
+  table tbody tr {
+    width: 100%;
+  }
+
+  table thead, table tbody tr {
+    display: table;
+    table-layout: fixed;
+  }
+
 </style>
