@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import App from './App.vue'
+import App from './components/App.vue'
 import VTooltip from 'v-tooltip'
 
 Vue.use(VTooltip);
@@ -10,6 +10,9 @@ new Vue({
 
 $(document).ready(function () {
   $('.dataTable').DataTable({
+    "scrollY": "656px",
+    "scrollCollapse": true,
+    "responsive": true,
     "language": {
       "url": "//cdn.datatables.net/plug-ins/1.10.16/i18n/Russian.json"
     },
