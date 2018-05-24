@@ -88,7 +88,6 @@
         localStorage.setItem('vocabulary', JSON.stringify(this.vocabulary));
         localStorage.setItem('learnedWords', JSON.stringify(this.learnedWordsRendered));
         this.$emit('remove', this.learnedWordsRendered)
-
       },
       sorting: function (ev, column) {
         let element = $(ev.target);
