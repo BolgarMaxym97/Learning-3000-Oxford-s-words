@@ -3,12 +3,14 @@
     <div class="container">
       <div class="row justify-content-center align-items-center">
         <div class="topcorner">
-          <button @click="showInfo" class="btn btn-info waves-effect waves-light btn-sm">
+          <button class="btn btn-info waves-effect waves-light btn-sm"
+                  data-toggle="modal" data-target="#info">
             <i class="fas fa-info-circle"></i>
           </button>
         </div>
         <div class="col-md-12">
-          <h1 class="display-1"><span class="title-text"> {{word}}<br> - <br><span v-html="translated"></span> </span></h1>
+          <h1 class="display-1"><span class="title-text"> {{word}}<br> - <br><span v-html="translated"></span> </span>
+          </h1>
           <button v-tooltip="okText" type="button"
                   @click="learned"
                   class="btn btn-success waves-effect waves-light btn-xlg btn-block">
@@ -22,7 +24,8 @@
         </div>
         <div class="row">
           <div class="col-md-12">
-          <learnedTable :learnedWords="learnedWords" :vocabulary="vocabulary" @remove="(learnedWords) => this.learnedWords = learnedWords"></learnedTable>
+            <learnedTable :learnedWords="learnedWords" :vocabulary="vocabulary"
+                          @remove="(learnedWords) => this.learnedWords = learnedWords"></learnedTable>
           </div>
         </div>
       </div>
@@ -37,7 +40,8 @@
       </div>
     </v-modal-simple>
 
-    <v-modal-simple id="info" VClass="modal-dialog modal-sm modal-dialog-centered">
+    <v-modal-simple id="info"
+                    VClass="modal-dialog modal-sm modal-dialog-centered">
       <h4 slot="subject">Статистика</h4>
       <div slot="body">
         <div class="p-3 mb-2 bg-success text-white">Выучено слов: {{learnedWords.length}}</div>
@@ -64,6 +68,7 @@
         learnedWords: [],
         okText: 'При нажатии на эту кнопку данное слово больше не будет Вам показано и запишеться в "Выученые"',
         cancelText: 'При нажатии на эту кнопку Вы пропустите это слово и оно Вам будет показано позже в случайном порядке',
+        showInfoModal: false,
       }
     },
 
@@ -87,9 +92,13 @@
 
     methods: {
       translate: function (sourceText) {
-        $.post('https://translate.yandex.net/api/v1.5/tr.json/translate?lang=en-ru&key=trnsl.1.1.20180522T115145Z.f4b2ddcb7743cad5.df843115c2d9508d95ba4e901f8a873a302ef2e2', {
-          text: sourceText
-        }).done((response) => this.translated = response.text.join(' '));
+        this.$http.post('https://translate.yandex.net/api/v1.5/tr.json/translate?lang=en-ru&key=trnsl.1.1.20180522T115145Z.f4b2ddcb7743cad5.df843115c2d9508d95ba4e901f8a873a302ef2e2',
+          {
+            text: sourceText
+          },
+          {
+            emulateJSON: true,
+          }).then(response => this.translated = response.body.text.join(' '), response => console.log('server error:' + response));
       },
 
       learned: function () {
@@ -104,10 +113,6 @@
         this.translated = '<i class="fas fa-spinner"></i>';
         this.word = _.sample(this.vocabulary);
         this.translate(this.word);
-      },
-
-      showInfo: function () {
-        $('#info').modal('show');
       },
     },
   }

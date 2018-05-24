@@ -93,7 +93,7 @@
       sorting: function (ev, column) {
         let element = $(ev.target);
         let icon = element.find('i');
-        $('i').not(icon).not('.fa-trash-alt').not('.fa-info-circle').not('.fa-search').removeClass().addClass('fas fa-sort');
+        $('.sorting i').not(icon).removeClass().addClass('fas fa-sort');
         if (icon.hasClass('fa-sort')) {
           icon.removeClass('fa-sort').addClass('fa-sort-up');
           this.learnedWordsRendered = _.sortBy(this.learnedWordsRendered, item => {
