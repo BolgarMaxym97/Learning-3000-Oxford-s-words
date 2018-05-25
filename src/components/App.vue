@@ -31,7 +31,7 @@
       </div>
     </div>
 
-    <v-modal-simple id="welcome" VClass="modal-dialog modal-lg modal-dialog-centered">
+    <v-modal-simple id="welcome" VClass="modal-dialog modal-lg modal-dialog-centered" :class="{in: showWelcomeModal }">
       <h4 slot="subject">3000 оксфордских слов</h4>
       <div slot="body" class="alert alert-primary" role="alert">
         Оксфордский словарь имеет собственный список самых важных слов английского языка.
@@ -68,7 +68,7 @@
         learnedWords: [],
         okText: 'При нажатии на эту кнопку данное слово больше не будет Вам показано и запишеться в "Выученые"',
         cancelText: 'При нажатии на эту кнопку Вы пропустите это слово и оно Вам будет показано позже в случайном порядке',
-        showInfoModal: false,
+        showWelcomeModal: false,
       }
     },
 
@@ -88,6 +88,14 @@
       }
       this.word = _.sample(this.vocabulary);
       this.translate(this.word);
+    },
+
+    mounted() {
+      let showWelcome = +localStorage.getItem('showWelcome');
+      if (showWelcome !== 1) {
+        this.showWelcomeModal = true;
+        localStorage.setItem('showWelcome', 1);
+      }
     },
 
     methods: {
@@ -143,5 +151,9 @@
 
   .fa-info-circle {
     font-size: 22px !important;
+  }
+
+  .in {
+    display:block;
   }
 </style>

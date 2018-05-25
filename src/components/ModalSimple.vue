@@ -1,11 +1,11 @@
 <template>
-  <div class="modal" :id="id">
+  <div class="modal" :id="id" :class="{hide: hidden}">
     <div :class="VClass">
       <div class="modal-content">
         <!-- Modal Header -->
         <div class="modal-header">
           <slot name="subject"></slot>
-          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <button type="button" class="close" @click="hidden = true" data-dismiss="modal">&times;</button>
         </div>
         <!-- Modal body -->
         <div class="modal-body">
@@ -13,7 +13,7 @@
         </div>
         <!-- Modal footer -->
         <div class="modal-footer">
-          <button type="button" class="btn btn-danger waves-effect waves-light" data-dismiss="modal">Закрыть
+          <button type="button" @click="hidden = true" class="btn btn-danger waves-effect waves-light" data-dismiss="modal">Закрыть
           </button>
         </div>
       </div>
@@ -33,10 +33,17 @@
         required: true,
         type: String
       }
+    },
+    data() {
+      return {
+        hidden: false
+      }
     }
   }
 </script>
 
 <style lang="scss">
-
+.hide {
+  display: none;
+}
 </style>

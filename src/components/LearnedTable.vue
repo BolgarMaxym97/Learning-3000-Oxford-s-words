@@ -26,10 +26,10 @@
             <table class="table table-striped">
               <thead class="">
               <tr>
-                <th scope="col" class="sorting" data-sorted="default" @click="sorting($event, 'word')">Слово <i
-                  class="fas fa-sort"></i></th>
-                <th scope="col" class="sorting" data-sorted="default" @click="sorting($event, 'translated')">Перевод <i
-                  class="fas fa-sort"></i></th>
+                <th scope="col" class="sorting" data-sorted="default" @click="sorting($event, 'word', wordClass)">Слово <i
+                  class="fas" :class="wordClass"></i></th>
+                <th scope="col" class="sorting" data-sorted="default" @click="sorting($event, 'translated', translatedClass)">Перевод <i
+                  class="fas" :class="translatedClass"></i></th>
                 <th scope="col"></th>
               </tr>
               </thead>
@@ -69,6 +69,8 @@
         learnedWordsRendered: this.learnedWords,
         learnedWordsFixed: this.learnedWords,
         searchWord: '',
+        wordClass: 'fa-sort',
+        translatedClass: 'fa-sort'
       }
     },
     watch: {
@@ -89,23 +91,25 @@
         localStorage.setItem('learnedWords', JSON.stringify(this.learnedWordsRendered));
         this.$emit('remove', this.learnedWordsRendered)
       },
-      sorting: function (ev, column) {
-        let element = $(ev.target);
-        let icon = element.find('i');
-        $('.sorting i').not(icon).removeClass().addClass('fas fa-sort');
-        if (icon.hasClass('fa-sort')) {
-          icon.removeClass('fa-sort').addClass('fa-sort-up');
+      sorting: function (ev, column, className) {
+        if (column === 'word') {
+          this.translatedClass = 'fa-sort';
+        } else {
+          this.wordClass = 'fa-sort';
+        }
+        if (className === 'fa-sort') {
+          this[column+'Class'] = 'fa-sort-up';
           this.learnedWordsRendered = _.sortBy(this.learnedWordsRendered, item => {
             let index = Object.keys(item).join('');
             let value = item[index];
             return column === 'word' ? index : value;
           });
 
-        } else if (icon.hasClass('fa-sort-up')) {
-          icon.removeClass('fa-sort-up').addClass('fa-sort-down');
+        } else if (className ==='fa-sort-up') {
+          this[column+'Class'] = 'fa-sort-down';
           this.learnedWordsRendered = this.learnedWordsRendered.reverse();
         } else {
-          icon.removeClass('fa-sort-down').addClass('fa-sort-up');
+          this[column+'Class'] = 'fa-sort-up';
           this.learnedWordsRendered = this.learnedWordsRendered.reverse();
         }
       }

@@ -10,11 +10,3 @@ let vm = new Vue({
   el: '#app',
   render: h => h(App)
 });
-
-$(document).ready(function () {
-  let showWelcome = +localStorage.getItem('showWelcome');
-  if (showWelcome !== 1) {
-    $('#welcome').modal('show');
-    localStorage.setItem('showWelcome', 1);
-  }
-});
