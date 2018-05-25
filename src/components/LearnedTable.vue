@@ -26,9 +26,11 @@
             <table class="table table-striped">
               <thead class="">
               <tr>
-                <th scope="col" class="sorting" data-sorted="default" @click="sorting($event, 'word', wordClass)">Слово <i
-                  class="fas" :class="wordClass"></i></th>
-                <th scope="col" class="sorting" data-sorted="default" @click="sorting($event, 'translated', translatedClass)">Перевод <i
+                <th scope="col" class="sorting" data-sorted="default" @click="sorting($event, 'word', wordClass)">Слово
+                  <i
+                    class="fas" :class="wordClass"></i></th>
+                <th scope="col" class="sorting" data-sorted="default"
+                    @click="sorting($event, 'translated', translatedClass)">Перевод <i
                   class="fas" :class="translatedClass"></i></th>
                 <th scope="col"></th>
               </tr>
@@ -74,7 +76,7 @@
       }
     },
     watch: {
-      searchWord: function () {
+      searchWord() {
         this.learnedWordsRendered = _.filter(this.learnedWordsFixed, item => {
           let index = Object.keys(item).join('');
           let value = item[index];
@@ -83,7 +85,7 @@
       }
     },
     methods: {
-      removeFromLearned: function (id) {
+      removeFromLearned(id) {
         this.vocabulary.push(Object.keys(this.learnedWordsRendered[id]).join(''));
         this.learnedWordsRendered.splice(id, 1);
         this.learnedWordsFixed.splice(id, 1);
@@ -91,25 +93,25 @@
         localStorage.setItem('learnedWords', JSON.stringify(this.learnedWordsRendered));
         this.$emit('remove', this.learnedWordsRendered)
       },
-      sorting: function (ev, column, className) {
+      sorting(ev, column, className) {
         if (column === 'word') {
           this.translatedClass = 'fa-sort';
         } else {
           this.wordClass = 'fa-sort';
         }
         if (className === 'fa-sort') {
-          this[column+'Class'] = 'fa-sort-up';
+          this[column + 'Class'] = 'fa-sort-up';
           this.learnedWordsRendered = _.sortBy(this.learnedWordsRendered, item => {
             let index = Object.keys(item).join('');
             let value = item[index];
             return column === 'word' ? index : value;
           });
 
-        } else if (className ==='fa-sort-up') {
-          this[column+'Class'] = 'fa-sort-down';
+        } else if (className === 'fa-sort-up') {
+          this[column + 'Class'] = 'fa-sort-down';
           this.learnedWordsRendered = this.learnedWordsRendered.reverse();
         } else {
-          this[column+'Class'] = 'fa-sort-up';
+          this[column + 'Class'] = 'fa-sort-up';
           this.learnedWordsRendered = this.learnedWordsRendered.reverse();
         }
       }

@@ -13,6 +13,7 @@
           </h1>
           <button v-tooltip="okText" type="button"
                   @click="learned"
+                  :disabled="nextBtnActive"
                   class="btn btn-success waves-effect waves-light btn-xlg btn-block">
             Выучено
           </button>
@@ -69,6 +70,7 @@
         okText: 'При нажатии на эту кнопку данное слово больше не будет Вам показано и запишеться в "Выученые"',
         cancelText: 'При нажатии на эту кнопку Вы пропустите это слово и оно Вам будет показано позже в случайном порядке',
         showWelcomeModal: false,
+        nextBtnActive: true,
       }
     },
 
@@ -77,7 +79,7 @@
       "v-modal-simple": modalSimple,
     },
 
-    created: function () {
+    created() {
       let fileVocabularyStorage = JSON.parse(localStorage.getItem('vocabulary'));
       this.learnedWords = JSON.parse(localStorage.getItem('learnedWords')) || [];
       if (fileVocabularyStorage) {
@@ -99,17 +101,22 @@
     },
 
     methods: {
-      translate: function (sourceText) {
+      translate(sourceText) {
+        this.nextBtnActive = true;
         this.$http.post('https://translate.yandex.net/api/v1.5/tr.json/translate?lang=en-ru&key=trnsl.1.1.20180522T115145Z.f4b2ddcb7743cad5.df843115c2d9508d95ba4e901f8a873a302ef2e2',
           {
             text: sourceText
           },
           {
             emulateJSON: true,
-          }).then(response => this.translated = response.body.text.join(' '), response => console.log('server error:' + response));
+          }).then(response => {
+          this.nextBtnActive = false;
+          return this.translated = response.body.text.join(' ')
+          }, response => console.log('server error:' + response)
+        );
       },
 
-      learned: function () {
+      learned() {
         this.learnedWords.push({[this.word]: this.translated});
         this.vocabulary = this.vocabulary.filter(word => word !== this.word);
         localStorage.setItem('vocabulary', JSON.stringify(this.vocabulary));
@@ -117,7 +124,7 @@
         return this.next();
       },
 
-      next: function () {
+      next() {
         this.translated = '<i class="fas fa-spinner"></i>';
         this.word = _.sample(this.vocabulary);
         this.translate(this.word);
@@ -154,6 +161,6 @@
   }
 
   .in {
-    display:block;
+    display: block;
   }
 </style>

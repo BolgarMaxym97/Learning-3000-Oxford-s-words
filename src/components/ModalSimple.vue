@@ -13,7 +13,8 @@
         </div>
         <!-- Modal footer -->
         <div class="modal-footer">
-          <button type="button" @click="hidden = true" class="btn btn-danger waves-effect waves-light" data-dismiss="modal">Закрыть
+          <button type="button" @click="hidden = true" class="btn btn-danger waves-effect waves-light"
+                  data-dismiss="modal">Закрыть
           </button>
         </div>
       </div>
@@ -43,7 +44,7 @@
 </script>
 
 <style lang="scss">
-.hide {
-  display: none;
-}
+  .hide {
+    display: none;
+  }
 </style>
