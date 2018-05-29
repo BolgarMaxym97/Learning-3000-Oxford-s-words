@@ -11,7 +11,12 @@
         <div class="col-md-12">
           <h1 class="display-1"><span class="title-text"> {{word}}<br> - <br><span v-html="translated"></span> </span>
           </h1>
-          <button v-tooltip="okText" type="button"
+          <button v-tooltip="'Озвучить'"
+                  @click="play"
+                  class="btn btn-warning waves-effect waves-light">
+            <i class="fas fa-volume-up"></i>
+          </button>
+          <button  v-tooltip="okText" type="button"
                   @click="learned"
                   :disabled="nextBtnActive"
                   class="btn btn-success waves-effect waves-light btn-xlg btn-block">
@@ -128,6 +133,10 @@
         this.translated = '<i class="fas fa-spinner"></i>';
         this.word = _.sample(this.vocabulary);
         this.translate(this.word);
+      },
+
+      play() {
+        responsiveVoice.speak(this.word);
       },
     },
   }
