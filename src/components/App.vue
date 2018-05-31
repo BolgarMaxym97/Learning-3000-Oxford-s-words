@@ -16,7 +16,12 @@
                   class="btn btn-warning waves-effect waves-light">
             <i class="fas fa-volume-up"></i>
           </button>
-          <button  v-tooltip="okText" type="button"
+          <button v-tooltip="'Пример предложения'"
+                  data-toggle="modal" data-target="#example"
+                  class="btn btn-success waves-effect waves-light">
+            <i class="fas fa-question-circle"></i>
+          </button>
+          <button v-tooltip="okText" type="button"
                   @click="learned"
                   :disabled="nextBtnActive"
                   class="btn btn-success waves-effect waves-light btn-xlg btn-block">
@@ -55,6 +60,14 @@
       </div>
     </v-modal-simple>
 
+    <v-modal-simple id="example"
+                    VClass="modal-dialog modal-lg modal-dialog-centered">
+      <h4 slot="subject">Пример</h4>
+      <div slot="body">
+        <div class="p-3 mb-2 bg-success text-white font-weight-bold">{{sentence}}</div>
+      </div>
+    </v-modal-simple>
+
   </div>
 </template>
 
@@ -76,7 +89,20 @@
         cancelText: 'При нажатии на эту кнопку Вы пропустите это слово и оно Вам будет показано позже в случайном порядке',
         showWelcomeModal: false,
         nextBtnActive: true,
+        exampleText: {},
       }
+    },
+
+    computed: {
+      sentence() {
+        let sentenceMain = 'Не удалось подобрать пример';
+        _.each(this.exampleText, (sentence, index) => {
+          if (this.findWord(this.word, sentence) && sentence.length > 15) {
+            return sentenceMain = sentence;
+          }
+        });
+        return sentenceMain;
+      },
     },
 
     components: {
@@ -93,6 +119,12 @@
         localStorage.setItem('vocabulary', JSON.stringify(fileVocabulary));
         this.vocabulary = fileVocabulary;
       }
+
+      this.exampleText = JSON.parse(localStorage.getItem('sentences')) || {};
+      if (!this.exampleText.length) {
+        $.get('src/assets/text.json').done(response => localStorage.setItem('sentences', JSON.stringify(response)));
+      }
+
       this.word = _.sample(this.vocabulary);
       this.translate(this.word);
     },
@@ -106,6 +138,10 @@
     },
 
     methods: {
+      findWord(word, str) {
+        return str.split(' ').some(function(w){return w === word})
+      },
+
       translate(sourceText) {
         this.nextBtnActive = true;
         this.$http.post('https://translate.yandex.net/api/v1.5/tr.json/translate?lang=en-ru&key=trnsl.1.1.20180522T115145Z.f4b2ddcb7743cad5.df843115c2d9508d95ba4e901f8a873a302ef2e2',
@@ -115,8 +151,8 @@
           {
             emulateJSON: true,
           }).then(response => {
-          this.nextBtnActive = false;
-          return this.translated = response.body.text.join(' ')
+            this.nextBtnActive = false;
+            return this.translated = response.body.text.join(' ')
           }, response => console.log('server error:' + response)
         );
       },
