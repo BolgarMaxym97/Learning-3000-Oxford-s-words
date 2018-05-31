@@ -122,8 +122,10 @@
 
       this.exampleText = JSON.parse(localStorage.getItem('sentences')) || {};
       if (!this.exampleText.length) {
-        $.get('src/assets/text.json').done(response => localStorage.setItem('sentences', JSON.stringify(response)));
-        this.exampleText = JSON.parse(localStorage.getItem('sentences')) || {};
+        $.get('src/assets/text.json').done(response => {
+          localStorage.setItem('sentences', JSON.stringify(response));
+          this.exampleText = response;
+        });
       }
 
       this.word = _.sample(this.vocabulary);
