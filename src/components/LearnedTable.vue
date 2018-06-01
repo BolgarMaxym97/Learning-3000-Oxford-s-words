@@ -45,6 +45,11 @@
                           v-tooltip="'Убрать слово из выученых'">
                     <i class="fas fa-trash-alt"></i>
                   </button>
+                  <button type="button" class="btn btn-warning btn-sm waves-effect waves-light"
+                          @click="play(index)"
+                          v-tooltip="'Озвучить'">
+                    <i class="fas fa-volume-up"></i>
+                  </button>
                 </td>
               </tr>
               </tbody>
@@ -92,6 +97,9 @@
         localStorage.setItem('vocabulary', JSON.stringify(this.vocabulary));
         localStorage.setItem('learnedWords', JSON.stringify(this.learnedWordsRendered));
         this.$emit('remove', this.learnedWordsRendered)
+      },
+      play(id) {
+        responsiveVoice.speak(Object.keys(this.learnedWordsRendered[id]).join(''));
       },
       sorting(ev, column, className) {
         if (column === 'word') {

@@ -79,6 +79,11 @@
 
   export default {
     name: 'app',
+    components: {
+      learnedTable,
+      "v-modal-simple": modalSimple,
+    },
+
     data() {
       return {
         word: '---',
@@ -103,11 +108,6 @@
         });
         return sentenceMain;
       },
-    },
-
-    components: {
-      learnedTable,
-      "v-modal-simple": modalSimple,
     },
 
     created() {
