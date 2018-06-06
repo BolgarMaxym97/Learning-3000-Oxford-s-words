@@ -92,7 +92,6 @@
     methods: {
       removeFromLearned(id) {
         this.vocabulary.push(Object.keys(this.learnedWordsRendered[id]).join(''));
-        this.learnedWordsRendered.splice(id, 1);
         this.learnedWordsFixed.splice(id, 1);
         localStorage.setItem('vocabulary', JSON.stringify(this.vocabulary));
         localStorage.setItem('learnedWords', JSON.stringify(this.learnedWordsRendered));
